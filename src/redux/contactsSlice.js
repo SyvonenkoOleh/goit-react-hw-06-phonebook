@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { nanoid } from 'nanoid';
 import Notiflix from 'notiflix';
+
 
 export const notifySettings = {
   width: '380px',
@@ -23,26 +23,12 @@ export const contactsSlice = createSlice({
   initialState: defaultContacts,
   reducers: {
     addContact: (state, { payload }) => {
-      const { name, number } = payload;
-      const id = nanoid();
-
-      const includesName = state.find(
-        contact => contact.name.toLowerCase() === name.toLowerCase()
+      const { name } = payload;
+      state.push(payload);
+      Notiflix.Notify.success(
+        `${name} was successfully added to your contacts`,
+        notifySettings
       );
-
-      if (includesName) {
-        return Notiflix.Notify.warning(
-          `${name} is already in contacts`,
-          notifySettings
-        );
-      } else {
-        const contact = { id, name, number };
-        state.push(contact);
-        Notiflix.Notify.success(
-          `${name} was successfully added to your contacts`,
-          notifySettings
-        );
-      }
     },
 
     removeContact: (state, { payload }) => {
